@@ -29,6 +29,67 @@ mYvar = "input";
 
 This also applies to custom component props [[Vue Summary#Attribute bindings]]
 
+### Class bindings
+
+The class attribute can use binding too. The binding doesn't override the normal class attribute assignment.
+
+```html
+<div class="button" :class="`${isActive ? 'active' : 'inactive'}`" />
+```
+
+```js
+let dynamicClass =
+    `${flag ? "button--active" : "button--inactive"}
+```
+
+The rendered class will always have the `button` class, and can have `button--inactive` or `button--active` alternatively
+
+However, there are more elegant ways of doing class bindings using objects and arrays.
+
+### With objects
+
+```html
+<template>
+  <div class="static" :class="{ active: isActive, 'text-danger': hasError }" />
+</template>
+
+<script setup>
+  const isActive = ref(true) const hasError = ref(false)
+</script>
+```
+
+### With arrays
+
+```html
+<template>
+  <div :class="[activeClass, errorClass]" />
+</template>
+
+<script setup>
+  const activeClass = ref("active");
+  const errorClass = ref("text-danger");
+</script>
+```
+
+### With computed
+
+Both methods above benefit of the use of computed as instead of evaluating their conditions every time the component runs, they will be executed just when their dependencies change
+
+```html
+<template>
+  <div class="static" :class="classObject" />
+</template>
+
+<script setup>
+  const isActive = ref(true);
+  const hasError = ref(false);
+  const classObject = computed(() => ({
+    active: isActive.value && !error.value,
+    "text-danger": error.value,
+  }));
+</script>
+```
+
 ## Listening to events
 
 To capture events we use the v-on:eventName directive or its syntax sugar @eventName
